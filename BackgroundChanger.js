@@ -1,15 +1,20 @@
-const TIME = 10;
+const TOTAL_APP_RUN_TIME = 10;
+const SPEED_COLORS_CHANGE = 1;
+
+function randomColor() {
+  const r = Math.floor(Math.random() * 256);
+  const g = Math.floor(Math.random() * 256);
+  const b = Math.floor(Math.random() * 256);
+  return `rgb(${r},${g},${b})`;
+}
 
 function generateColors() {
   const colors = {};
-  const randomColor = () => {
-    const r = Math.floor(Math.random() * 256);
-    const g = Math.floor(Math.random() * 256);
-    const b = Math.floor(Math.random() * 256);
-    return `rgb(${r},${g},${b})`;
-  };
+  const colorCount = Math.round(
+    TOTAL_APP_RUN_TIME / SPEED_COLORS_CHANGE
+  );
 
-  for (let i = 0; i < TIME; i++) {
+  for (let i = 0; i < colorCount; i++) {
     let color = randomColor();
     while (color in colors) {
       color = randomColor();
@@ -20,12 +25,16 @@ function generateColors() {
 }
 
 function changeBackground(colors) {
+  const speedColorsChange = SPEED_COLORS_CHANGE * 1000;
   const changeBackgroundInterval = setInterval(() => {
     if (colors.length === 0) {
       clearInterval(changeBackgroundInterval);
     }
     document.body.style.backgroundColor = colors.pop();
-  },1000);
+  }, speedColorsChange);
 }
 
-changeBackground(generateColors());
+(function run() {
+  const colors = generateColors();
+  changeBackground(colors);
+})();
